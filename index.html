@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Essential Food 🥗</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f1;--panel:#fff;--ink:#17241d;--mute:#5d6b63;--line:#dcdfd6;--green:#1f4d3a;--gold:#c9871f;--chip:#eef1ea;--done:#1f4d3a;--done-ink:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1713;--panel:#17211b;--ink:#eef2ea;--mute:#9aa99f;--line:#2a372f;--green:#7fcba3;--gold:#e5ac4a;--chip:#1f2c24;--done:#7fcba3;--done-ink:#0f1713}}
+:root[data-theme="dark"]{--bg:#0f1713;--panel:#17211b;--ink:#eef2ea;--mute:#9aa99f;--line:#2a372f;--green:#7fcba3;--gold:#e5ac4a;--chip:#1f2c24;--done:#7fcba3;--done-ink:#0f1713}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "DM Sans",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+header.hero{padding:40px 0 24px;border-bottom:1px solid var(--line)}
+h1{font:600 clamp(2.6rem,8vw,5rem)/1.02 Fraunces,Georgia,serif;letter-spacing:-.02em;margin:0 0 18px;max-width:11ch}
+.lead{color:var(--mute);max-width:52ch;font-size:1.1rem;margin:0 0 18px}
+.meter{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.bar{flex:1 1 220px;max-width:360px;height:8px;border-radius:8px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s ease}
+.meter b{font-weight:600}
+button.reset{font:inherit;font-size:.9rem;background:none;border:1px solid var(--line);color:var(--ink);padding:6px 14px;border-radius:99px;cursor:pointer}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav a{flex:none;text-decoration:none;color:var(--ink);font-size:.9rem;padding:6px 12px;border-radius:99px;border:1px solid var(--line)}
+nav a:hover{background:var(--chip)}
+section.grp{display:grid;grid-template-columns:190px 1fr;gap:6px 28px;padding:16px 0;align-items:center;border-bottom:1px solid var(--line)}
+.ico{font-size:1.4rem;line-height:1;display:inline-block;margin-right:8px;vertical-align:middle}
+h2{font:600 1.2rem/1.2 Fraunces,Georgia,serif;margin:0;display:inline;vertical-align:middle}
+.why{color:var(--mute);font-size:.82rem;line-height:1.35;margin:4px 0 0}
+.count{color:var(--gold);font-weight:600;font-size:.8rem;margin-top:2px}
+.items{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.item{font:500 .9rem DM Sans,sans-serif;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s,color .15s,border-color .15s}
+.item:before{content:"";width:12px;height:12px;border-radius:50%;border:1.5px solid var(--mute);flex:none}
+.item[aria-pressed="true"]{background:var(--done);color:var(--done-ink);border-color:var(--done)}
+.item[aria-pressed="true"]:before{border-color:var(--done-ink);background:radial-gradient(var(--done-ink) 45%,transparent 50%)}
+.item:focus-visible,button.reset:focus-visible,nav a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+footer{padding:40px 0 56px;color:var(--mute);font-size:.88rem}
+@media(max-width:700px){section.grp{grid-template-columns:1fr;padding:14px 0}header.hero{padding-top:32px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<h1>Essential Food </h1>
+<p class="lead">Nine food groups that cover a day of balanced eating. Tap each food as you eat it and watch the day fill up.</p>
+<div class="meter"><div class="bar" role="progressbar" aria-label="Foods eaten today" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div><span><b id="n">0</b> of <span id="t">0</span> eaten today</span><button class="reset" id="reset">Start a new day</button></div>
+</div></header>
+<nav aria-label="Food groups"><div class="wrap" id="nav"></div></nav>
+<main class="wrap" id="groups"></main>
+<footer><div class="wrap">General nutrition guide, not medical advice. Check with a doctor or dietitian for allergies or health conditions.</div></footer>
+<script>
+var G=[
+["🥛","Dairy","Calcium and protein for bones and muscles.",["Milk","Curd"]],
+["🥚","Protein","Complete protein with B12 and choline.",["Eggs"]],
+["🌾","Grains","Millets bring fibre, iron and slow energy.",["Ragi","Bajra","Jowar","Foxtail","Little","Kodo"]],
+["🍲","Pulses","Plant protein, folate and iron.",["Masoor","Moong","Chana","Urad","Toor","Lobia"]],
+["🥜","Healthy fats","Good fats and minerals for heart and brain.",["Peanuts","Sesame","Flaxseed"]],
+["🥬","Vegetables","Vitamins, potassium and fibre in every colour.",["Moringa","Spinach","Broccoli","Peas","Potato","Carrot","Tomato","Cabbage","Pumpkin"]],
+["🍌","Fruits","Vitamin C, natural sugars and fibre.",["Guava","Banana","Papaya","Orange","Mango","Pomegranate"]],
+["🧂","Minerals","Iodine keeps the thyroid working well.",["Iodized salt"]],
+["☀️","Vitamin D","For calcium absorption and strong bones.",["Sunlight","Fortified foods"]]
+];
+var KEY="dailyplate:"+new Date().toDateString(),state={},total=0;
+try{state=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+var main=document.getElementById("groups"),nav=document.getElementById("nav");
+G.forEach(function(g,i){
+ total+=g[3].length;
+ var a=document.createElement("a");a.href="#g"+i;a.textContent=g[0]+" "+g[1];nav.appendChild(a);
+ var s=document.createElement("section");s.className="grp";s.id="g"+i;
+ s.innerHTML='<div><div><span class="ico" aria-hidden="true">'+g[0]+'</span><h2>'+g[1]+'</h2></div><p class="why">'+g[2]+'</p><div class="count" id="c'+i+'"></div></div><div class="items"></div>';
+ var box=s.querySelector(".items");
+ g[3].forEach(function(name){
+  var b=document.createElement("button");b.className="item";b.type="button";b.textContent=name;
+  var k=i+":"+name;b.setAttribute("aria-pressed",state[k]?"true":"false");
+  b.onclick=function(){state[k]=!state[k];b.setAttribute("aria-pressed",state[k]?"true":"false");save();update()};
+  box.appendChild(b)});
+ main.appendChild(s)});
+document.getElementById("t").textContent=total;
+function update(){
+ var done=0;
+ G.forEach(function(g,i){var c=0;g[3].forEach(function(n){if(state[i+":"+n])c++});done+=c;
+  document.getElementById("c"+i).textContent=c+" of "+g[3].length+" eaten"});
+ var p=Math.round(done/total*100);
+ document.getElementById("n").textContent=done;
+ document.getElementById("fill").style.width=p+"%";
+ document.querySelector(".bar").setAttribute("aria-valuenow",p)}
+document.getElementById("reset").onclick=function(){state={};save();document.querySelectorAll(".item").forEach(function(b){b.setAttribute("aria-pressed","false")});update()};
+update();
+</script>
+</body>
+</html>
