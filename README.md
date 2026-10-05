@@ -9,4 +9,4 @@ List of Essential Food
 🥬 Vegetables: Moringa, spinach, broccoli, peas, potato, carrot, tomato, cabbage, pumpkin
 🍌 Fruits: Guava, banana, papaya, orange, mango, pomegranate
 🧂 Minerals: Iodized salt
-☀️ Vitamin D: Sunlight / fortified foods
+☀️ Vitamin D: Sunlight / fortified foods.
