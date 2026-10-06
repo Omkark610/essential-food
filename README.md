@@ -13,7 +13,7 @@ List of Essential Food
 
 🥬 Vegetables: Moringa, spinach, broccoli, peas, potato, carrot, tomato, cabbage, pumpkin
 
-🍌 Fruits: Guava, banana, papaya, orange, mango, pomegranate
+🍌 Fruits: Guava, banana, papaya, orange, mango, pomegranate, coconut, avocado
 
 🧂 Minerals: Iodized salt
 
